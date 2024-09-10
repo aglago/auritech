@@ -33,17 +33,122 @@ const InvoiceDetail = () => {
   const handleDownloadPDF = async () => {
     const html2pdf = (await import("html2pdf.js")).default;
     const invoiceElement = document.getElementById("invoice-detail");
-    invoiceElement.style.border = "none";
+
+    // Store original styles
+    const originalStyles = {
+      fontSize: invoiceElement.style.fontSize,
+      padding: invoiceElement.style.padding,
+    };
+
+    // Function to apply PDF-friendly styles
+    const applyPDFStyles = (element) => {
+      // Reset any responsive font sizes
+      element.style.fontSize = "12px";
+      element.style.padding = "20px";
+
+      // Adjust logo size
+      const logo = element.querySelector("img");
+      if (logo) {
+        logo.style.width = "80px";
+      }
+
+      // Adjust headings
+      element.querySelectorAll("h2").forEach((h2) => {
+        h2.style.fontSize = "16px";
+        h2.style.marginBottom = "10px";
+      });
+
+      // Adjust paragraphs
+      element.querySelectorAll("p").forEach((p) => {
+        p.style.fontSize = "12px";
+        p.style.marginBottom = "5px";
+      });
+
+      // Adjust table
+      const table = element.querySelector("table");
+      if (table) {
+        table.style.fontSize = "10px";
+        table.style.width = "100%";
+        table.style.borderCollapse = "collapse";
+
+        // Adjust table headers
+        table.querySelectorAll("th").forEach((th) => {
+          th.style.fontSize = "11px";
+          th.style.padding = "5px";
+          th.style.backgroundColor = "#f0f0f0";
+        });
+
+        // Adjust table cells
+        table.querySelectorAll("td").forEach((td) => {
+          td.style.padding = "5px";
+        });
+      }
+
+      // Adjust specific sections
+      const sections = ["billing-address", "shipping-address", "order-details"];
+      sections.forEach((sectionClass) => {
+        const section = element.querySelector(`.${sectionClass}`);
+        if (section) {
+          section.style.marginBottom = "15px";
+        }
+      });
+
+      // Adjust the signature area
+      const signatureArea = element.querySelector(".signature-area");
+      if (signatureArea) {
+        signatureArea.style.marginTop = "20px";
+      }
+
+      // Adjust the total amount and amount in words
+      const totalAmount = element.querySelector(".total-amount");
+      if (totalAmount) {
+        totalAmount.style.fontWeight = "bold";
+        totalAmount.style.fontSize = "14px";
+      }
+
+      const amountInWords = element.querySelector(".amount-in-words");
+      if (amountInWords) {
+        amountInWords.style.fontStyle = "italic";
+        amountInWords.style.marginTop = "10px";
+      }
+    };
+
+    // Apply PDF styles
+    applyPDFStyles(invoiceElement);
 
     const options = {
-      margin: 0.5,
+      margin: 10,
       filename: `invoice_${id}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
 
-    html2pdf().set(options).from(invoiceElement).save();
+    try {
+      // Generate PDF
+      await html2pdf().set(options).from(invoiceElement).save();
+    } finally {
+      // Revert to original styles
+      invoiceElement.style.fontSize = originalStyles.fontSize;
+      invoiceElement.style.padding = originalStyles.padding;
+
+      // Revert all specific style changes
+      invoiceElement.querySelectorAll("*").forEach((el) => {
+        el.style.fontSize = "";
+        el.style.padding = "";
+        el.style.margin = "";
+        el.style.width = "";
+        el.style.fontWeight = "";
+        el.style.fontStyle = "";
+        el.style.backgroundColor = "";
+      });
+
+      // Revert table styles
+      const table = invoiceElement.querySelector("table");
+      if (table) {
+        table.style.borderCollapse = "";
+      }
+    }
   };
 
   const totalAmount = invoice?.items ? calculateTotal(invoice) : 0;
