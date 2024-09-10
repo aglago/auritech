@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { validateGSTIN, formatCurrency, numberToWords } from "../utils/helpers";
-import ItemsList from "./ItemsList";
+import { formatCurrency, numberToWords } from "../utils/helpers";
 
 const InvoiceForm = ({ onInvoiceGenerated, onSaveDraft }) => {
   const [formData, setFormData] = useState({
@@ -43,21 +42,37 @@ const InvoiceForm = ({ onInvoiceGenerated, onSaveDraft }) => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e, section, field) => {
-    const { value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [section]: {
-        ...prevData[section],
-        [field]: value,
-      },
-    }));
-    if (errors[section] && errors[section][field]) {
+    const { name, value } = e.target;
+    setFormData((prevData) => {
+      if (section) {
+        return {
+          ...prevData,
+          [section]: {
+            ...prevData[section],
+            [field]: value,
+          },
+        };
+      } else {
+        return {
+          ...prevData,
+          [name]: value,
+        };
+      }
+    });
+
+    // Error handling
+    if (section && field) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         [section]: {
           ...prevErrors[section],
           [field]: null,
         },
+      }));
+    } else if (name) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: null,
       }));
     }
   };
@@ -217,186 +232,93 @@ const InvoiceForm = ({ onInvoiceGenerated, onSaveDraft }) => {
     };
     onSaveDraft(draftData);
   };
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Seller Details */}
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Seller Details</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {Object.keys(formData.sellerDetails).map((field) => (
-            <div key={field}>
-              <input
-                type="text"
-                placeholder={
-                  field
-                    .replace(/([A-Z])/g, " $1")
-                    .charAt(0)
-                    .toUpperCase() + field.slice(1)
-                }
-                value={formData.sellerDetails[field]}
-                onChange={(e) => handleChange(e, "sellerDetails", field)}
-                className="w-full px-3 py-2 border rounded-md"
-              />
-              {errors.sellerDetails && errors.sellerDetails[field] && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.sellerDetails[field]}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-4">
+        <FormSection
+          title="Seller Details"
+          data={formData.sellerDetails}
+          section="sellerDetails"
+          handleChange={handleChange}
+          errors={errors.sellerDetails}
+        />
+        <FormSection
+          title="Billing Details"
+          data={formData.billingDetails}
+          section="billingDetails"
+          handleChange={handleChange}
+          errors={errors.billingDetails}
+        />
+        <FormSection
+          title="Shipping Details"
+          data={formData.shippingDetails}
+          section="shippingDetails"
+          handleChange={handleChange}
+          errors={errors.shippingDetails}
+        />
       </div>
 
-      {/* Billing Details */}
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Billing Details</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {Object.keys(formData.billingDetails).map((field) => (
-            <div key={field}>
-              <input
-                type="text"
-                placeholder={
-                  field
-                    .replace(/([A-Z])/g, " $1")
-                    .charAt(0)
-                    .toUpperCase() + field.slice(1)
-                }
-                value={formData.billingDetails[field]}
-                onChange={(e) => handleChange(e, "billingDetails", field)}
-                className="w-full px-3 py-2 border rounded-md"
-              />
-              {errors.billingDetails && errors.billingDetails[field] && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.billingDetails[field]}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <Input
+          label="Place of Supply"
+          name="placeOfSupply"
+          value={formData.placeOfSupply}
+          onChange={handleChange}
+        />
+        <Input
+          label="Place of Delivery"
+          name="placeOfDelivery"
+          value={formData.placeOfDelivery}
+          onChange={handleChange}
+        />
       </div>
 
-      {/* Shipping Details */}
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Shipping Details</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {Object.keys(formData.shippingDetails).map((field) => (
-            <div key={field}>
-              <input
-                type="text"
-                placeholder={
-                  field
-                    .replace(/([A-Z])/g, " $1")
-                    .charAt(0)
-                    .toUpperCase() + field.slice(1)
-                }
-                value={formData.shippingDetails[field]}
-                onChange={(e) => handleChange(e, "shippingDetails", field)}
-                className="w-full px-3 py-2 border rounded-md"
-              />
-              {errors.shippingDetails && errors.shippingDetails[field] && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.shippingDetails[field]}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <Input
+          label="Order Number"
+          value={formData.orderDetails.orderNo}
+          onChange={(e) => handleChange(e, "orderDetails", "orderNo")}
+        />
+        <Input
+          label="Order Date"
+          type="date"
+          value={formData.orderDetails.orderDate}
+          onChange={(e) => handleChange(e, "orderDetails", "orderDate")}
+        />
+        <Input
+          label="Invoice Number"
+          value={formData.invoiceDetails.invoiceNo}
+          onChange={(e) => handleChange(e, "invoiceDetails", "invoiceNo")}
+        />
+        <Input
+          label="Invoice Date"
+          type="date"
+          value={formData.invoiceDetails.invoiceDate}
+          onChange={(e) => handleChange(e, "invoiceDetails", "invoiceDate")}
+        />
       </div>
 
-      {/* Place of Supply and Delivery */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <input
-            type="text"
-            placeholder="Place of Supply"
-            value={formData.placeOfSupply}
-            onChange={(e) => handleChange(e, "", "placeOfSupply")}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Place of Delivery"
-            value={formData.placeOfDelivery}
-            onChange={(e) => handleChange(e, "", "placeOfDelivery")}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-      </div>
-
-      {/* Order and Invoice Details */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <input
-            type="text"
-            placeholder="Order Number"
-            value={formData.orderDetails.orderNo}
-            onChange={(e) => handleChange(e, "orderDetails", "orderNo")}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <input
-            type="date"
-            value={formData.orderDetails.orderDate}
-            onChange={(e) => handleChange(e, "orderDetails", "orderDate")}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Invoice Number"
-            value={formData.invoiceDetails.invoiceNo}
-            onChange={(e) => handleChange(e, "invoiceDetails", "invoiceNo")}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <input
-            type="date"
-            value={formData.invoiceDetails.invoiceDate}
-            onChange={(e) => handleChange(e, "invoiceDetails", "invoiceDate")}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-      </div>
-
-      {/* Items */}
       <ItemsList
-        formData={formData}
+        items={formData.items}
         handleItemChange={handleItemChange}
         removeItem={removeItem}
         addItem={addItem}
-        errors={errors}
+        errors={errors.items}
       />
 
-      {/* Reverse Charge */}
-      <div>
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            checked={formData.reverseCharge}
-            onChange={(e) =>
-              setFormData({ ...formData, reverseCharge: e.target.checked })
-            }
-            className="mr-2"
-          />
-          <span>Reverse Charge Applicable</span>
-        </label>
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          checked={formData.reverseCharge}
+          onChange={(e) =>
+            setFormData({ ...formData, reverseCharge: e.target.checked })
+          }
+          className="mr-2"
+        />
+        <label>Reverse Charge Applicable</label>
       </div>
 
-      {/* Totals */}
-      <div className="space-y-2">
-        <p>Subtotal: {formatCurrency(calculateTotals().subtotal)}</p>
-        <p>Taxes: {formatCurrency(calculateTotals().taxes)}</p>
-        <p className="font-bold">
-          Total: {formatCurrency(calculateTotals().total)}
-        </p>
-        <p>Amount in Words: {numberToWords(calculateTotals().total)}</p>
-      </div>
+      <TotalSection totals={calculateTotals()} />
 
       <div className="flex justify-between">
         <button
@@ -421,5 +343,166 @@ InvoiceForm.propTypes = {
   onInvoiceGenerated: PropTypes.func.isRequired,
   onSaveDraft: PropTypes.func.isRequired,
 };
+
+const FormSection = ({ title, data, section, handleChange, errors }) => (
+  <div>
+    <h2 className="text-xl font-semibold mb-2">{title}</h2>
+    <div className="space-y-2">
+      {Object.keys(data).map((field) => (
+        <Input
+          key={field}
+          label={
+            field
+              .replace(/([A-Z])/g, " $1")
+              .charAt(0)
+              .toUpperCase() + field.slice(1)
+          }
+          value={data[field]}
+          onChange={(e) => handleChange(e, section, field)}
+          error={errors && errors[field]}
+        />
+      ))}
+    </div>
+  </div>
+);
+
+FormSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
+  section: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  errors: PropTypes.object,
+};
+
+const Input = ({ label, name, value, onChange, type = "text", error }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700">{label}</label>
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    />
+    {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+  </div>
+);
+
+Input.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  error: PropTypes.string,
+};
+
+const ItemsList = ({
+  items,
+  handleItemChange,
+  removeItem,
+  addItem,
+  errors,
+}) => (
+  <div>
+    <h2 className="text-xl font-semibold mb-2">Items</h2>
+    {items.map((item, index) => (
+      <div key={index} className="mb-4 p-4 border rounded-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <Input
+            label="Description"
+            value={item.description}
+            onChange={(e) =>
+              handleItemChange(index, "description", e.target.value)
+            }
+            error={errors && errors[index] && errors[index].description}
+          />
+          <Input
+            label="Unit Price"
+            type="number"
+            value={item.unitPrice}
+            onChange={(e) =>
+              handleItemChange(index, "unitPrice", parseFloat(e.target.value))
+            }
+            error={errors && errors[index] && errors[index].unitPrice}
+          />
+          <Input
+            label="Quantity"
+            type="number"
+            value={item.quantity}
+            onChange={(e) =>
+              handleItemChange(index, "quantity", parseInt(e.target.value))
+            }
+            error={errors && errors[index] && errors[index].quantity}
+          />
+          <Input
+            label="Discount"
+            type="number"
+            value={item.discount}
+            onChange={(e) =>
+              handleItemChange(index, "discount", parseFloat(e.target.value))
+            }
+          />
+          <Input
+            label="Tax Rate (%)"
+            type="number"
+            value={item.taxRate}
+            onChange={(e) =>
+              handleItemChange(index, "taxRate", parseFloat(e.target.value))
+            }
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => removeItem(index)}
+          className="mt-2 text-red-600 hover:text-red-800"
+        >
+          Remove Item
+        </button>
+      </div>
+    ))}
+    <button
+      type="button"
+      onClick={addItem}
+      className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+    >
+      Add Item
+    </button>
+  </div>
+);
+
+ItemsList.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string.isRequired,
+      unitPrice: PropTypes.number.isRequired,
+      quantity: PropTypes.number.isRequired,
+      discount: PropTypes.number.isRequired,
+      taxRate: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  handleItemChange: PropTypes.func.isRequired,
+  removeItem: PropTypes.func.isRequired,
+  addItem: PropTypes.func.isRequired,
+  errors: PropTypes.object,
+};
+
+const TotalSection = ({ totals }) => (
+  <div className="space-y-2">
+    <p>Subtotal: {formatCurrency(totals.subtotal)}</p>
+    <p>Taxes: {formatCurrency(totals.taxes)}</p>
+    <p className="font-bold">Total: {formatCurrency(totals.total)}</p>
+    <p>Amount in Words: {numberToWords(totals.total)}</p>
+  </div>
+);
+TotalSection.propTypes = {
+  totals: PropTypes.shape({
+    subtotal: PropTypes.number.isRequired,
+    taxes: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
+
 
 export default InvoiceForm;
