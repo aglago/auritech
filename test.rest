@@ -1,0 +1,104 @@
+POST http://localhost:5000/api/invoices
+Content-Type: application/json
+
+{
+  "sellerDetails": {
+    "name": "PQR Enterprises",
+    "address": "456 Cedar Street",
+    "city": "Star City",
+    "state": "Starland",
+    "pincode": "987654",
+    "panNo": "PQRCD1234E",
+    "gstRegistrationNo": "19PQRCD1234E1Z8"
+  },
+  "placeOfSupply": "Star City",
+  "billingDetails": {
+    "name": "Emily Clark",
+    "address": "789 Aspen Road",
+    "city": "Star City",
+    "state": "Starland",
+    "pincode": "987654",
+    "stateUTCode": "19"
+  },
+  "shippingDetails": {
+    "name": "Henry Lee",
+    "address": "123 Redwood Avenue",
+    "city": "Star City",
+    "state": "Starland",
+    "pincode": "987654",
+    "stateUTCode": "19"
+  },
+  "placeOfDelivery": "123 Redwood Avenue",
+  "orderDetails": {
+    "orderNo": "ORD987654",
+    "orderDate": "2024-09-15T00:00:00.000Z"
+  },
+  "invoiceDetails": {
+    "invoiceNo": "INV987654",
+    "invoiceDate": "2024-09-16T00:00:00.000Z"
+  },
+  "reverseCharge": false,
+  "items": [
+    {
+      "description": "Product A",
+      "unitPrice": 50.00,
+      "quantity": 5,
+      "discount": 5.00,
+      "taxRate": 5
+    },
+    {
+      "description": "Product B",
+      "unitPrice": 120.00,
+      "quantity": 3,
+      "discount": 10.00,
+      "taxRate": 12
+    },
+    {
+      "description": "Product C",
+      "unitPrice": 200.00,
+      "quantity": 2,
+      "discount": 20.00,
+      "taxRate": 18
+    },
+    {
+      "description": "Product D",
+      "unitPrice": 350.00,
+      "quantity": 1,
+      "discount": 25.00,
+      "taxRate": 18
+    },
+    {
+      "description": "Product E",
+      "unitPrice": 75.00,
+      "quantity": 4,
+      "discount": 7.50,
+      "taxRate": 5
+    },
+    {
+      "description": "Product F",
+      "unitPrice": 90.00,
+      "quantity": 6,
+      "discount": 9.00,
+      "taxRate": 12
+    },
+    {
+      "description": "Product G",
+      "unitPrice": 150.00,
+      "quantity": 2,
+      "discount": 15.00,
+      "taxRate": 12
+    },
+    {
+      "description": "Product H",
+      "unitPrice": 220.00,
+      "quantity": 3,
+      "discount": 22.00,
+      "taxRate": 18
+    }
+  ],
+  "subtotal": 2100.00,
+  "taxes": 252.00,
+  "total": 2352.00
+}
+
+
