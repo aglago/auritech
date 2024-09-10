@@ -3,102 +3,75 @@ Content-Type: application/json
 
 {
   "sellerDetails": {
-    "name": "PQR Enterprises",
-    "address": "456 Cedar Street",
-    "city": "Star City",
-    "state": "Starland",
-    "pincode": "987654",
-    "panNo": "PQRCD1234E",
-    "gstRegistrationNo": "19PQRCD1234E1Z8"
+    "name": "ABC Traders",
+    "address": "987 Oak Lane",
+    "city": "Metropolis",
+    "state": "Metropolis State",
+    "pincode": "123456",
+    "panNo": "ABCXY1234F",
+    "gstRegistrationNo": "27ABCXY1234F1Z2"
   },
-  "placeOfSupply": "Star City",
+  "placeOfSupply": "Metropolis",
   "billingDetails": {
-    "name": "Emily Clark",
-    "address": "789 Aspen Road",
-    "city": "Star City",
-    "state": "Starland",
-    "pincode": "987654",
-    "stateUTCode": "19"
+    "name": "John Doe",
+    "address": "555 Elm Street",
+    "city": "Metropolis",
+    "state": "Metropolis State",
+    "pincode": "123456",
+    "stateUTCode": "27"
   },
   "shippingDetails": {
-    "name": "Henry Lee",
-    "address": "123 Redwood Avenue",
-    "city": "Star City",
-    "state": "Starland",
-    "pincode": "987654",
-    "stateUTCode": "19"
+    "name": "John Doe",
+    "address": "555 Elm Street",
+    "city": "Metropolis",
+    "state": "Metropolis State",
+    "pincode": "123456",
+    "stateUTCode": "27"
   },
-  "placeOfDelivery": "123 Redwood Avenue",
+  "placeOfDelivery": "Metropolis",
   "orderDetails": {
-    "orderNo": "ORD987654",
-    "orderDate": "2024-09-15T00:00:00.000Z"
+    "orderNo": "ORD123456",
+    "orderDate": "2024-09-20T00:00:00.000Z"
   },
   "invoiceDetails": {
-    "invoiceNo": "INV987654",
-    "invoiceDate": "2024-09-16T00:00:00.000Z"
+    "invoiceNo": "INV123456",
+    "invoiceDate": "2024-09-21T00:00:00.000Z"
   },
   "reverseCharge": false,
   "items": [
     {
-      "description": "Product A",
-      "unitPrice": 50.00,
-      "quantity": 5,
-      "discount": 5.00,
-      "taxRate": 5
-    },
-    {
-      "description": "Product B",
-      "unitPrice": 120.00,
-      "quantity": 3,
-      "discount": 10.00,
-      "taxRate": 12
-    },
-    {
-      "description": "Product C",
-      "unitPrice": 200.00,
-      "quantity": 2,
-      "discount": 20.00,
-      "taxRate": 18
-    },
-    {
-      "description": "Product D",
-      "unitPrice": 350.00,
-      "quantity": 1,
-      "discount": 25.00,
-      "taxRate": 18
-    },
-    {
-      "description": "Product E",
-      "unitPrice": 75.00,
+      "description": "Item A",
+      "unitPrice": 100.00,
       "quantity": 4,
-      "discount": 7.50,
+      "discount": 8.00,
       "taxRate": 5
     },
     {
-      "description": "Product F",
-      "unitPrice": 90.00,
-      "quantity": 6,
-      "discount": 9.00,
-      "taxRate": 12
-    },
-    {
-      "description": "Product G",
+      "description": "Item B",
       "unitPrice": 150.00,
       "quantity": 2,
       "discount": 15.00,
       "taxRate": 12
     },
     {
-      "description": "Product H",
-      "unitPrice": 220.00,
+      "description": "Item C",
+      "unitPrice": 200.00,
       "quantity": 3,
-      "discount": 22.00,
+      "discount": 20.00,
+      "taxRate": 18
+    },
+    {
+      "description": "Item D",
+      "unitPrice": 250.00,
+      "quantity": 1,
+      "discount": 10.00,
       "taxRate": 18
     }
   ],
-  "subtotal": 2100.00,
-  "taxes": 252.00,
-  "total": 2352.00
+  "subtotal": 1020.00,
+  "taxes": 121.20,
+  "total": 1141.20
 }
+
 
 

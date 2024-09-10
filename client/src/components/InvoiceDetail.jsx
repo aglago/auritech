@@ -239,17 +239,17 @@ const InvoiceDetail = () => {
                     <tr>
                       <td className="border border-gray-300 p-1">Discount</td>
                       <td className="border border-gray-300 p-1 text-right">
-                        ₹{item.discount?.toFixed(2)}
+                        ₹{item.discount?.toFixed(2) || 0}
                       </td>
                       <td className="border border-gray-300 p-1"></td>
                       <td className="border border-gray-300 p-1 text-right">
                         ₹30.96
                       </td>
                       <td className="border border-gray-300 p-1 text-right">
-                        SGST
+                        {taxType === "IGST" ? "---" : "SGST"}
                       </td>
                       <td className="border border-gray-300 p-1 text-right">
-                        ₹{taxAmount.SGST?.toFixed(2)}
+                        ₹{taxAmount.SGST?.toFixed(2) || "0"}
                       </td>
                     </tr>
                   </React.Fragment>
