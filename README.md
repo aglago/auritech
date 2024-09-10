@@ -15,7 +15,7 @@ InvoiceHub is a full-stack web application for creating, managing, and tracking 
 - Frontend: React, React Router, Tailwind CSS
 - Backend: Node.js, Express.js
 - Database: MongoDB
-- PDF Generation: PDFKit
+- PDF Generation: HTML2PDF
 
 ## Getting Started
 
