@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { FileText, BarChart, Cloud, Smartphone } from "lucide-react";
+import PropTypes from "prop-types";
+
 
 const FeatureCard = ({ Icon, title, description }) => (
   <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -100,6 +102,12 @@ const Home = () => {
       </main>
     </div>
   );
+};
+
+FeatureCard.propTypes = {
+  Icon: PropTypes.elementType.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 };
 
 export default Home;

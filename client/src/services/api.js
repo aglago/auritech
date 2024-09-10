@@ -31,3 +31,20 @@ export const getInvoicePDF = (id) => {
 export const saveDraft = (draftData) => {
   return axios.post(`${API_URL}/drafts`, draftData);
 };
+
+
+export const getDrafts = () => {
+  return axios.get(`${API_URL}/drafts`);
+};
+
+export const getDraft = (id) => {
+  return axios.get(`${API_URL}/drafts/${id}`);
+};
+
+export const updateDraft = (id, draftData) => {
+  return axios.put(`${API_URL}/drafts/${id}`, draftData);
+};
+
+export const deleteDraft = (id) => {
+  return axios.delete(`${API_URL}/drafts/${id}`);
+};
