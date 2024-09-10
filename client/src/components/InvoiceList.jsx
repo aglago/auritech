@@ -32,11 +32,11 @@ const InvoiceList = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col justify-between items-start gap-6 mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Invoices</h1>
         <Link
           to="/create"
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center"
         >
           <PlusCircle className="mr-2" size={20} />
           Create New Invoice
